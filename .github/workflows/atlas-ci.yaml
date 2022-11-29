@@ -1,0 +1,39 @@
+name: Atlas CI
+on:
+  # Run whenever code is changed in the master branch,
+  # change this to your root branch.
+  push:
+    branches:
+      - main
+  # Run on PRs where something changed under the `path/to/migration/dir/` directory.
+  pull_request:
+    paths:
+      - 'migrations/*'
+  workflow_dispatch:
+jobs:
+  lint:
+    services:
+      postgres14:
+        image: postgres:14
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: pass
+        ports:
+          - 5430:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.1
+        with:
+          fetch-depth: 0 # Mandatory unless "latest" is set below.
+      - uses: ariga/atlas-action@v0.2.3
+        with:
+          dir: migrations
+          ariga-url: https://ci.ariga.dev
+          ariga-token: aci_Fibes5ba5YP1Lg9/8qU7SELu5RLHn6/WZmW5S4uCqouIjeLlr7nfccWaFFynalIvNQu18l8wH4RuGGDm
+          dir-format: atlas # Or: golang-migrate, goose, dbmate, flyway, liquibase
+          dev-url: postgres://postgres:pass@localhost:5430/test?sslmode=disable
