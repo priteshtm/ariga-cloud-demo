@@ -34,6 +34,6 @@ jobs:
         with:
           dir: migrations
           ariga-url: https://ci.ariga.dev
-          ariga-token: aci_Fibes5ba5YP1Lg9/8qU7SELu5RLHn6/WZmW5S4uCqouIjeLlr7nfccWaFFynalIvNQu18l8wH4RuGGDm
+          ariga-token: ${{ secrets.ARIGA_TOKEN }}
           dir-format: atlas # Or: golang-migrate, goose, dbmate, flyway, liquibase
           dev-url: postgres://postgres:pass@localhost:5430/test?sslmode=disable
